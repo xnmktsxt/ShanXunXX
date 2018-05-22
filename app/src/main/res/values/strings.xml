@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ShanXunXX</string>
+    <string name="get_password">获取密码</string>
+    <string name="email">请输入邮箱</string>
 </resources>
