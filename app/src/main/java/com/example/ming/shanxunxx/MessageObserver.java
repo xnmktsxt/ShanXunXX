@@ -22,28 +22,24 @@ public class MessageObserver extends ContentObserver {
     @Override
     public void onChange(boolean selfChange) {
 
-        Uri inbox = Uri.parse("content://sms/inbox");
         //按降序排序短信数据库
-        Cursor cursor = context.getContentResolver().query(inbox,
-                null, null, null,
-                "date desc");
+        Cursor cursor = context.getContentResolver().query(Uri.parse("content://sms/inbox"),
+                new String[] {"_id", "address", "body", "read" }, "address=? and read=?",
+                new String[] { "1065930051", "0" }, "date desc");
+
         if(cursor != null){
-            //if(cursor.moveToFirst()){
-                cursor.moveToFirst();
+            if(cursor.moveToFirst()){
                 //获取短信内容
                 String messageBody = cursor.getString(cursor.getColumnIndex("body"));
-                //authCode = getAuthCode(messageBody);
-                //MainActivity.authCodeTextView.setText(authCode);
                 MainActivity.authCodeTextView.setText(messageBody);
                 System.out.println(messageBody);
-                cursor.close();
-                super.onChange(selfChange);
-            //}
+            }
         }
     }
 
     //正则匹配6位随机密码
     public String getAuthCode(String messageBody){
+
         Pattern authCodePattern = Pattern.compile("(\\d{6})");
         Matcher matcher = authCodePattern.matcher(messageBody);
         if(matcher.find()){
