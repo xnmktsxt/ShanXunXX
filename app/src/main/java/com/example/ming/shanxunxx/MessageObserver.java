@@ -13,6 +13,7 @@ public class MessageObserver extends ContentObserver {
 
     private Context context;
     private String authCode = "";
+    private String effectiveDate = "";
 
     public MessageObserver(Context context, Handler handler) {
         super(handler);
@@ -32,7 +33,11 @@ public class MessageObserver extends ContentObserver {
                 //获取短信内容
                 String messageBody = cursor.getString(cursor.getColumnIndex("body"));
                 MainActivity.authCodeTextView.setText(messageBody);
-                System.out.println(messageBody);
+                authCode = getAuthCode(messageBody);
+                System.out.println(authCode);
+                effectiveDate = getEffectiveDate(messageBody);
+                System.out.println(effectiveDate);
+                cursor.close();
             }
         }
     }
@@ -41,6 +46,16 @@ public class MessageObserver extends ContentObserver {
     public String getAuthCode(String messageBody){
 
         Pattern authCodePattern = Pattern.compile("(\\d{6})");
+        Matcher matcher = authCodePattern.matcher(messageBody);
+        if(matcher.find()){
+            authCode = matcher.group();
+        }
+        return authCode;
+    }
+
+    //正则匹配密码的有效日期
+    public String getEffectiveDate(String messageBody){
+        Pattern authCodePattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2})");
         Matcher matcher = authCodePattern.matcher(messageBody);
         if(matcher.find()){
             authCode = matcher.group();
