@@ -3,4 +3,5 @@
     <string name="app_name">ShanXunXX</string>
     <string name="get_password">获取密码</string>
     <string name="email">请输入邮箱</string>
+    <string name="auth_code">密码</string>
 </resources>
